@@ -1,0 +1,176 @@
+@font-face {
+  font-family: "Rubik";
+  src: url("../font/Rubik-VariableFont_wght.ttf") format(".ttf");
+}
+* {
+  font-family: "Rubik" sans-serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.htmx-indicator{
+    display:none;
+}
+.htmx-request .htmx-indicator{
+    display:inline;
+}
+.htmx-request.htmx-indicator{
+    display:inline;
+}
+
+img {
+  max-width: 100%;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: rgb(240, 240, 240);
+  /* background-image: linear-gradient(#ffc700 20%, transparent 20%); */
+  background-attachment: fixed;
+  margin: 0;
+}
+
+#container {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100dvh;
+}
+
+.fx__table th {
+  text-transform: uppercase;
+  color: rgb(150, 150, 150);
+}
+
+.btn-custom-primary {
+  background: #000046;
+  background: -webkit-linear-gradient(to right, #1CB5E0, #000046);
+  background: linear-gradient(to right, #1CB5E0, #000046);
+}
+
+.fx__navbar {
+  position: sticky;
+  top: 0;
+  box-sizing: border-box;
+  height: 100%;
+  max-height: 100dvh;
+  overflow-y: auto;
+  padding: 4rem 0;
+  background: #000046;
+}
+.fx__navbar-brand {
+  text-align: center;
+}
+.fx__navbar-brand a {
+  color: white;
+}
+.fx__navbar-section {
+  margin-top: 3rem;
+}
+.fx__navbar-subtitle {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 3rem;
+  font-size: 1rem;
+}
+.fx__navbar-item {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0.9;
+  padding: 0.5rem 0 0.5rem 2rem;
+  width: 100%;
+}
+.fx__navbar-item i {
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  margin-right: 0.75rem;
+}
+.fx__navbar-list {
+  margin: 0;
+  padding: 0;
+}
+.fx__navbar > .fx__navbar-section > .fx__navbar-list > li:hover > .fx__navbar-item, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li.active > .fx__navbar-item, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li:has(:hover) > .fx__navbar-item, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li:has(.active) > .fx__navbar-item {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.fx__navbar > .fx__navbar-section > .fx__navbar-list > li:hover > .fx__navbar-item::before, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li.active > .fx__navbar-item::before, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li:has(:hover) > .fx__navbar-item::before, .fx__navbar > .fx__navbar-section > .fx__navbar-list > li:has(.active) > .fx__navbar-item::before {
+  width: 3px;
+  color: white;
+}
+.fx__navbar li {
+  transition: color 0.2s;
+}
+.fx__navbar li > .fx__navbar-item {
+  position: relative;
+}
+.fx__navbar li > .fx__navbar-item::before, .fx__navbar li:has(> div) > .fx__navbar-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 0px;
+  background-color: white;
+  border-radius: 1rem 0 0 1rem;
+  transition: 0.3s;
+}
+.fx__navbar li:has(> div) > .fx__navbar-item::after {
+  width: 14px;
+  height: 14px;
+  inset: 50% 10px auto auto;
+  clip-path: polygon(30% 0%, 50% 0%, 100% 50%, 50% 100%, 30% 100%, 80% 50%);
+  translate: 0% -50%;
+}
+.fx__navbar li.active > .fx__navbar-item, .fx__navbar li:hover > .fx__navbar-item {
+  color: white;
+}
+.fx__navbar li.active > .fx__navbar-item::after {
+  rotate: 90deg;
+}
+.fx__navbar li.active > div {
+  grid-template-rows: 1fr;
+}
+.fx__navbar li > div {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.fx__navbar li > div > .fx__navbar-list {
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.fx__navbar li.static > div {
+  transition: none;
+}
+
+section {
+  min-height: 40dvh;
+}
+
+.pf__card-image-warp {
+  height: 300px;
+}
+.pf__card-image-warp img {
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.pf__image-upload {
+  position: relative;
+  height: 400px;
+}
+.pf__image-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 1rem;
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,114 @@
+$parent-selector: '.fx__navbar'
+#{$parent-selector}
+    &
+        position: sticky
+        top: 0
+        
+        box-sizing: border-box
+        height: 100%
+        max-height: 100dvh
+
+        overflow-y: auto
+        padding: 4rem 0
+
+        background: #000046  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to bottom, #1CB5E0, #000046)  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, #1CB5E0, #000046) /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    &-brand
+        &
+            text-align: center
+        a
+            color: $color-white
+
+    &-section
+        margin-top: 3rem        
+
+    &-subtitle
+        text-transform: uppercase
+        font-weight: bold
+        letter-spacing: .1rem
+        color: color.adjust($color-white, $alpha: -.5)
+
+        margin-left: 3rem
+        font-size: 1rem
+
+    &-item
+        &
+            display: inline-block
+            color: color.adjust($color-white, $alpha: -.3)
+            opacity: .9
+            padding: .5rem 0 .5rem 2rem
+            width: 100%
+
+        i
+            display: inline-grid
+            place-items: center
+            width: 1rem
+            margin-right: .75rem
+    
+    &-list
+        margin: 0
+        padding: 0
+
+    & > &-section > &-list > li
+        &:hover, &.active, &:has(:hover), &:has(.active)
+            & > #{$parent-selector}-item
+                background-color: $color-white-alpha-1
+
+            & > #{$parent-selector}-item::before
+                width: 3px
+                color: $color-white
+
+    li
+        &
+            transition: color .2s
+
+        & > #{$parent-selector}-item
+            position: relative 
+
+        & > #{$parent-selector}-item::before, &:has(> div) > #{$parent-selector}-item::after
+            content: ''
+            position: absolute
+            inset: 0
+            width: 0px
+            
+            background-color: $color-white
+            border-radius: 1rem 0 0 1rem
+            
+            transition: .3s 
+
+        &:has(> div) > #{$parent-selector}-item::after
+            width: 14px
+            height: 14px
+
+            inset: 50% 10px auto auto
+            clip-path: polygon(30% 0%, 50% 0%, 100% 50%, 50% 100%, 30% 100%, 80% 50%)
+
+            translate: 0% -50%
+
+        &.active, &:hover
+            & > #{$parent-selector}-item
+                color: $color-white
+        
+        &.active
+            & > #{$parent-selector}-item::after
+                rotate: 90deg
+
+            > div
+                grid-template-rows: 1fr
+
+        > div
+            &
+                display: grid
+                grid-template-rows: 0fr
+                transition: grid-template-rows .5s cubic-bezier(.76, 0, .24, 1)
+
+            > #{$parent-selector}-list
+                &
+                    overflow: hidden
+                    background-color: rgb(0, 0, 0, 0.2)
+
+        &.static > div
+            transition: none
+        
