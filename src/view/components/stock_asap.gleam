@@ -42,6 +42,17 @@ pub fn btn_add(on_click on_click)
     ])
 }
 
+pub fn btn_export_pdf(on_click on_click)
+{
+    bs5.button(bs5.secondary_danger, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip("Exporter PDF")
+    ]
+    , [
+        fa.icon("fa fa-file-pdf")
+    ])
+}
+
 pub fn btn_primary(attributes, content)
 {
     bs5.button(bs5.primary, [

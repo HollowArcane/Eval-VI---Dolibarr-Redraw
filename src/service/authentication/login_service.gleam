@@ -1,9 +1,23 @@
+import gleam/dynamic/decode
+import model/authentication/login_model.{type Login}
 import util/dolibarr
-import util/api_request
+import util/api_request.{JsonBody}
 import util/token.{type Token}
 
+pub fn login(login: Login)
+{
+    api_request.just_post(
+        dolibarr.api(["login"], []),
+        with: JsonBody(login_model.to_json(login)),
+        expect: api_request.expect_json(
+            decode.at(["success", "token"], decode.string),
+            decode.at(["error", "message"], decode.string),
+        )
+    )
+}
+
 /// Just save the cookie and you're good
-pub fn login(
+pub fn login_unsafe(
     token: Token,
     username username: String,
     password password: String,

@@ -1,10 +1,12 @@
+import util/token.{Token}
+import util/api_request.{ApiError}
+import model/authentication/login_model.{Login}
 import service/csrf_token_service
-import gleam/int
 import util/route
 import gleam/http/response.{Response}
 import gleam/result
 import util/events
-import service/common_service
+import service/common_service.{FetchError}
 import gleam/javascript/promise
 import view/components/stock_asap
 import redraw/dom/attribute
@@ -28,31 +30,24 @@ pub fn create_page()
         set_loading(True)
 
         use response <- promise.await({
-            // get token from localstorage or fetch from server
-            use token <- promise.try_await(csrf_token_service.get_or_fetch())
-
             // do login
-            token
-                |> login_service.login(username, password)
-                |> promise.map(result.map_error(_, common_service.FetchError))
+            login_service.login(Login(username:, password:))
+                |> promise.map(result.map_error(_, FetchError))
         })
         // handle errors
         case response
         {
+            Error(FetchError(ApiError(message))) ->
+                set_message(message)
+
             Error(e) -> {
                 echo e
                 set_message("Une erreur est survenue, veuillez réessayer ultérieurement")
             }
 
-            Ok(Response(body: "", ..)) ->
+            Ok(Response(body: token, ..)) -> {
+                let assert Ok(_) = csrf_token_service.store(Token(token))
                 route.go_to("/product")
-            
-            Ok(Response(status: 200, ..)) ->
-                set_message("Nom d'utilisateur ou mot de passe invalide")
-            
-            Ok(Response(status:, ..)) -> {
-                echo "Unexpected response " <> int.to_string(status)
-                set_message("Une erreur est survenue, veuillez réessayer ultérieurement")
             }
         }
 

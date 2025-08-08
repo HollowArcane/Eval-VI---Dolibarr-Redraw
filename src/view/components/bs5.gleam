@@ -78,7 +78,7 @@ pub fn center_screen(children: List(Component))
 pub fn container(children: List(Component))
 {
     html.div([
-        attribute.class_name("container mt-3"),
+        attribute.class_name("container mt-5"),
     ], children)
 }
 
@@ -94,6 +94,13 @@ pub fn pagination(pages)
             attribute.id("pagination")
         ], pages)],
     )
+}
+
+pub fn page_item(active, attributes, children)
+{
+    html.li([attribute.class("page-item" <> case active {True -> " active" False -> ""})], [
+        html.a([attribute.class("page-link"), ..attributes], children)
+    ])
 }
 
 pub fn link_button(variant: Variant, attributes: List(Attribute), children: List(Component)) -> Component

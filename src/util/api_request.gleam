@@ -147,16 +147,19 @@ fn to(
     {
         FormData(formdata) -> request
             |> request.set_body(formdata)
+            |> request.set_header("Content-Type", "multipart/form-data")
             |> fetch.send_form_data
 
         JsonBody(json) -> request
             |> request.set_body(json |> json.to_string)
+            |> request.set_header("Content-Type", "application/json")
             |> fetch.send
 
         Parameters(params) -> {
             use form, #(key, value) <- list.fold(params, form_data.new())
             form |> form_data.append(key, value)
         } |> request.set_body(request, _)
+            |> request.set_header("Content-Type", "application/x-www-form-urlencoded")
             |> fetch.send_form_data
     }
 

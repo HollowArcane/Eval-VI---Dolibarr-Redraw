@@ -1,5 +1,5 @@
-import gleam/string
-import gleam/list
+import gleam/int
+import gleam/http/request
 import gleam/dynamic/decode
 import util/token.{type Token}
 import util/dolibarr
@@ -18,11 +18,31 @@ pub fn query(token: Token, query: String, decoder)
     )
 }
 
-pub fn list(token: Token, table: String, decoder)
-{ query(token, "SELECT * FROM " <> table, decode.list(decoder)) }
-
-pub fn create(token: Token, table: String, values)
+pub fn list(token: Token, item: String, decoder, page: Int)
 {
-    let #(columns, values) = list.unzip(values)
-    query(token, "INSERT INTO " <> table <> "(" <> string.join(columns, ",") <> ") VALUES('" <> string.join(values, "', '") <> "')", decode.list(decode.dynamic))
+    use request <- api_request.get(
+        dolibarr.api([item], [
+            #("limit", "10"),
+            #("page", int.to_string(page)),
+        ]),
+        with: Parameters([]),
+        expect: api_request.expect_json(
+            decode.list(decoder),
+            decode.at(["error"], decode.dynamic)
+        )
+    )
+    request |> request.set_header("DOLAPIKEY", token.value)
+}
+
+pub fn create(token: Token, item: String, json)
+{
+    use request <- api_request.post(
+        dolibarr.api([item], []),
+        with: api_request.JsonBody(json),
+        expect: api_request.expect_json(
+            decode.int,
+            decode.at(["error", "message"], decode.string)
+        )
+    )
+    request |> request.set_header("DOLAPIKEY", token.value)
 }

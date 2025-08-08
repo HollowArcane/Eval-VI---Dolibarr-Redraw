@@ -18,7 +18,7 @@ pub fn create_page()
     hooks.use_init_effect(fn() {
         use token <- csrf_token_service.require
         
-        use warehouses <- promise.await(warehouse_service.list(token))
+        use warehouses <- promise.await(warehouse_service.list(token, 1))
         case warehouses 
         {
             Error(e) -> { echo e Nil }
