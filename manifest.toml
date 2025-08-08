@@ -3,8 +3,8 @@
 
 packages = [
   { name = "argv", version = "1.0.2", build_tools = ["gleam"], requirements = [], otp_app = "argv", source = "hex", outer_checksum = "BA1FF0929525DEBA1CE67256E5ADF77A7CDDFE729E3E3F57A5BDCAA031DED09D" },
-  { name = "data_dev_kit", version = "1.0.0", build_tools = ["gleam"], requirements = ["argv", "glance", "gleam_stdlib", "input", "simplifile", "toolkit_util"], source = "local", path = "../../../../code/gleam/data_dev_kit" },
-  { name = "decodex", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_regexp", "gleam_stdlib", "gtempo"], source = "local", path = "../../../../code/gleam/decodex" },
+  { name = "data_dev_kit", version = "1.0.0", build_tools = ["gleam"], requirements = ["argv", "glance", "gleam_stdlib", "input", "simplifile", "toolkit_util"], source = "local", path = "lib/data_dev_kit" },
+  { name = "decodex", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_regexp", "gleam_stdlib", "gtempo"], source = "local", path = "lib/decodex" },
   { name = "filepath", version = "1.1.2", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "filepath", source = "hex", outer_checksum = "B06A9AF0BF10E51401D64B98E4B627F1D2E48C154967DA7AF4D0914780A6D40A" },
   { name = "given", version = "5.1.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], otp_app = "given", source = "hex", outer_checksum = "4CA910387611906E79EC475994570B086E4947A163C5A3DD741BDBDB0D9B5DD4" },
   { name = "glance", version = "5.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "glexer"], otp_app = "glance", source = "hex", outer_checksum = "FAA3DAC74AF71D47C67D88EB32CE629075169F878D148BB1FF225439BE30070A" },
@@ -22,12 +22,12 @@ packages = [
   { name = "redraw", version = "2.0.2", build_tools = ["gleam"], requirements = ["gleam_javascript", "gleam_stdlib"], otp_app = "redraw", source = "hex", outer_checksum = "F95A1F4691A3CC2FD1FD7638178D7912AC5FB0E521C59970304E9DE4E739E40D" },
   { name = "redraw_dom", version = "2.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib", "redraw"], otp_app = "redraw_dom", source = "hex", outer_checksum = "8318DA1E428B349177C444DDC2FA9AE0D33E0DD0CC5A55B82F030811FFD69EA4" },
   { name = "simplifile", version = "2.3.0", build_tools = ["gleam"], requirements = ["filepath", "gleam_stdlib"], otp_app = "simplifile", source = "hex", outer_checksum = "0A868DAC6063D9E983477981839810DC2E553285AB4588B87E3E9C96A7FB4CB4" },
-  { name = "toolkit_util", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], source = "local", path = "../../../../code/gleam/toolkit_util" },
+  { name = "toolkit_util", version = "1.0.0", build_tools = ["gleam"], requirements = ["gleam_stdlib"], source = "local", path = "lib/toolkit_util" },
 ]
 
 [requirements]
-data_dev_kit = { path = "../../../../../code/gleam/data_dev_kit" }
-decodex = { path = "../../../../../code/gleam/decodex" }
+data_dev_kit = { path = "lib/data_dev_kit" }
+decodex = { path = "lib/decodex" }
 given = { version = ">= 5.1.0 and < 6.0.0" }
 gleam_fetch = { version = ">= 1.3.0 and < 2.0.0" }
 gleam_http = { version = ">= 4.1.1 and < 5.0.0" }
@@ -37,4 +37,4 @@ gleam_stdlib = { version = ">= 0.44.0 and < 2.0.0" }
 gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
 redraw = { version = ">= 2.0.2 and < 3.0.0" }
 redraw_dom = { version = ">= 2.0.0 and < 3.0.0" }
-toolkit_util = { path = "../../../../../code/gleam/toolkit_util" }
+toolkit_util = { path = "lib/toolkit_util" }
