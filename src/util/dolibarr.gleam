@@ -2,9 +2,15 @@ import gleam/string
 import util/route
 import gleam/list
 
-
 pub fn api(path: List(String), query: List(#(String, String)))
-{ url(["api", "index.php", ..path]) <> "?" <> list.map(query, fn(pair) {pair.0 <> "=" <> pair.1}) |> string.join("&") }
+{
+	let url = url(["api", "index.php", ..path])
+	case query
+	{
+		[] -> url
+		_ -> url <> "?" <> list.map(query, fn(pair) {pair.0 <> "=" <> pair.1}) |> string.join("&")
+	} 
+}
 
 pub fn url(url: List(String))
 {

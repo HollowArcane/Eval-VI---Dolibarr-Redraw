@@ -259,13 +259,17 @@ pub fn select(options options: List(#(String, String)), label label: String, err
     let invalid = error == ""
 
     html.div([attribute.class_name("mb-3")], [
-        html.label(
-            [
-                attribute.class_name("form-label " <> bools.check(invalid, "", "is-invalid")),
-                attribute.for(name),
-            ],
-            [html.text(label)]
-        ),
+        case label
+        {
+            "" -> redraw.fragment([])
+            _ -> html.label(
+                [
+                    attribute.class_name("form-label " <> bools.check(invalid, "", "is-invalid")),
+                    attribute.for(name),
+                ],
+                [html.text(label)]
+            )
+        },
         html.select(
             [
                 attribute.class_name("form-select"),
@@ -281,20 +285,58 @@ pub fn select(options options: List(#(String, String)), label label: String, err
     ])
 }
 
-pub fn file_input(label, error, attributes)
+pub fn radio(options options: List(#(String, String)), label label: String, error error: String, attributes attributes: List(Attribute))
+{
+    let name = string.lowercase(label) |> string.replace(" ", "-")
+    let invalid = error == ""
+
+    html.div([], [
+        html.label([attribute.class_name("form-label")], [html.text(label)]),
+        html.div([attribute.class("border p-2 pb-0 mb-3")], {
+            use #(value, label) <- list.map(options)
+            html.div([attribute.class_name("mb-3 form-check")], [
+                html.input(
+                    [
+                        attribute.type_("radio"),
+                        attribute.class_name("form-check-input " <> bools.check(invalid, "", "is-invalid")),
+                        attribute.value(value),
+                        attribute.name(name),
+                        attribute.id(name <> "-" <> value),
+                        ..attributes
+                    ]
+                ),
+                html.label(
+                    [
+                        attribute.class_name("form-check-label"),
+                        attribute.for(name),
+                    ],
+                    [html.text(label)]
+                ),
+            ])
+        }),
+        html.div([attribute.class_name("text-danger")], [html.text(error)])
+    ])
+
+
+}
+
+pub fn file_input(label label, error error, attributes attributes)
 { input("file", label:, error:, attributes:) }
 
-pub fn text_input(label, error, attributes)
+pub fn text_input(label label, error error, attributes attributes)
 { input("text", label:, error:, attributes:) }
 
-pub fn password_input(label, error, attributes)
+pub fn password_input(label label, error error, attributes attributes)
 { input("password", label:, error:, attributes:) }
 
-pub fn number_input(label, error, attributes)
+pub fn number_input(label label, error error, attributes attributes)
 { input("number", label:, error:, attributes:) }
 
-pub fn date_input(label, error, attributes)
+pub fn date_input(label label, error error, attributes attributes)
 { input("date", label:, error:, attributes:) }
+
+pub fn datetime_input(label label, error error, attributes attributes)
+{ input("datetime-local", label:, error:, attributes:) }
 
 pub fn textarea(label label: String, error error: String, attributes attributes: List(Attribute))
 {
@@ -320,10 +362,14 @@ pub fn input(type_ type_: String, label label: String, error error: String, attr
     let invalid = error == ""
 
     html.div([attribute.class_name("mb-3")], [
-        html.label(
-            [ attribute.class_name("form-label"), ],
-            [html.text(label)]
-        ),
+        case label
+        {
+            "" -> redraw.fragment([])
+            _ -> html.label(
+                [ attribute.class_name("form-label"), ],
+                [html.text(label)]
+            )
+        },
         html.input(
             [
                 attribute.type_(type_),
@@ -335,27 +381,33 @@ pub fn input(type_ type_: String, label label: String, error error: String, attr
     ])
 }
 
-pub fn checkbox(value value: String, label label: String, attributes attributes: List(Attribute))
+pub fn checkbox(value value: String, label label: String, error error: String, attributes attributes: List(Attribute))
 {
+    let invalid = error == ""
     let name = string.lowercase(label) |> string.replace(" ", "")
-    html.div([attribute.class_name("mb-3")], [
+    html.div([attribute.class_name("mb-3 form-check")], [
         html.input(
             [
                 attribute.type_("checkbox"),
-                attribute.class_name("form-check-input"),
+                attribute.class_name("form-check-input " <> bools.check(invalid, "", "is-invalid")),
                 attribute.value(value),
                 attribute.name(name),
                 attribute.id(name),
                 ..attributes
             ]
         ),
-        html.label(
-            [
-                attribute.class_name("form-check-label"),
-                attribute.for(name),
-            ],
-            [html.text(label)]
-        ),
+        case label 
+        {
+            "" -> redraw.fragment([])
+            _ -> html.label(
+                [
+                    attribute.class_name("form-check-label"),
+                    attribute.for(name),
+                ],
+                [html.text(label)]
+            )
+        },
+        html.div([attribute.class_name("invalid-feedback")], [html.text(error)])
     ])
 }
 

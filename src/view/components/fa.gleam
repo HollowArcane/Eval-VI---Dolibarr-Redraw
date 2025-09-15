@@ -4,5 +4,5 @@ import redraw/dom/html
 
 pub fn icon(class: String) -> Component
 {
-    html.i([attribute.class_name(class)], [])
+    html.i([attribute.class_name(class <> " fs-5")], [])
 }

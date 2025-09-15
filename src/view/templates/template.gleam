@@ -7,13 +7,23 @@ pub fn home(active, content)
 {
     html.div([attribute.id("container")], [
         html.aside([], [
-            fx.sidenav(active, #("/product", "Stock Asap"), [
+            fx.sidenav(active, #("/", "Stock Asap"), [
+                #("", [
+                    #("/", "Tableau de Bord"),
+                    #("/import", "Import"),
+                ]),
                 #("Stock", [
                     #("/product", "Produits"),
                     #("/warehouse", "Entrepôts"),
+                    #("/stock", "Stock"),
                 ]),
                 #("Frabrication", [
-                    #("#", "Ordre de Fabrication"),
+                    #("/bill-of-materials", "Fabrication"),
+                    #("/manufacturing-order", "Ordre de Fabrication"),
+                    #("/manufacturing-order/multiple", "Multiple Fabrication"),
+                ]),
+                #("", [
+                    #("/logout", "Se Déconnecter"),
                 ]),
             ])
         ]),

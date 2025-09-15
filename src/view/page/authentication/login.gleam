@@ -1,3 +1,4 @@
+import util/swal
 import util/token.{Token}
 import util/api_request.{ApiError}
 import model/authentication/login_model.{Login}
@@ -38,11 +39,13 @@ pub fn create_page()
         case response
         {
             Error(FetchError(ApiError(message))) ->
-                set_message(message)
+                swal.error("Erreur", message)
+                // set_message(message)
 
             Error(e) -> {
                 echo e
-                set_message("Une erreur est survenue, veuillez réessayer ultérieurement")
+                swal.error("Erreur", "Une erreur est survenue, veuillez réessayer ultérieurement")
+                // set_message("Une erreur est survenue, veuillez réessayer ultérieurement")
             }
 
             Ok(Response(body: token, ..)) -> {

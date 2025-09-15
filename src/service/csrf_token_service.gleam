@@ -1,3 +1,4 @@
+import toolkit_util/resource
 import util/route
 import given
 // import toolkit_util/resource
@@ -22,6 +23,7 @@ import gleam/result
 
 pub fn require(then)
 {
+    use <- resource.defer(Nil)
     given.ok(
         restore(),
         fn(_) {
@@ -32,13 +34,16 @@ pub fn require(then)
     )
 }
 
-fn restore()
+pub fn restore()
 {
     use token_str <- result.try(local_storage.get("token")
         |> result.replace_error(json.UnableToDecode([])))
 
     token_str |> json.parse(token.decoder())
 }
+
+pub fn remove()
+{ local_storage.remove("token") }
 
 pub fn store(token: Token)
 { local_storage.set("token", token.to_json(token) |> json.to_string) }

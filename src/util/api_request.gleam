@@ -1,3 +1,5 @@
+import gleam/bit_array
+import gleam/string_tree
 import gleam/function
 import gleam/http
 import given
@@ -33,6 +35,18 @@ pub type Error(custom_error)
     Other(custom_error)
 }
 
+pub fn map_error(error: Error(a), map: fn(a) -> b)
+{
+    case error
+    {
+        ApiAccessError(e) -> ApiAccessError(e)
+        ApiError(e) -> ApiError(map(e))
+        JsonDecodeError(errors:) -> JsonDecodeError(errors)
+        MalformedURIError -> MalformedURIError
+        Other(e) -> Other(map(e))
+    }
+}
+
 pub fn expect_json(success_decoder, error_decoder)
 { Json(success_decoder, error_decoder) }
 
@@ -41,6 +55,9 @@ pub fn expect_text()
 
 pub fn expect_bits()
 { Bits(fetch.read_bytes_body) }
+
+pub fn get_response_body(response: response.Response(a))
+{ response.body }
 
 fn resolve_fetch_error(error: fetch.FetchError)
 {
@@ -155,12 +172,16 @@ fn to(
             |> request.set_header("Content-Type", "application/json")
             |> fetch.send
 
-        Parameters(params) -> {
-            use form, #(key, value) <- list.fold(params, form_data.new())
-            form |> form_data.append(key, value)
-        } |> request.set_body(request, _)
-            |> request.set_header("Content-Type", "application/x-www-form-urlencoded")
-            |> fetch.send_form_data
+        Parameters(params) ->  request |> request.set_body({
+			use parameters, #(key, value) <- list.fold(params, string_tree.new())
+			parameters
+				|> string_tree.append(key)
+				|> string_tree.append("=")
+				|> string_tree.append(value)
+				|> string_tree.append("&")
+		} |> string_tree.to_string |> bit_array.from_string)
+		|> request.set_header("Content-Type", "application/x-www-form-urlencoded")
+		|> fetch.send_bits()
     }
 
     use response <- promise.await(promise)

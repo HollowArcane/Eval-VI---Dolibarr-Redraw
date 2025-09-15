@@ -8,7 +8,7 @@ import redraw.{type Component}
 
 pub fn table(headers: List(String), body: Component) -> Component
 {
-    bs5.table([attribute.class_name("fx__table table table-hover shadow")], [
+    bs5.table([attribute.class_name("fx__table table table-hover")], [
         html.thead([], [
             html.tr([], list.map(headers, fn(header) {
                 html.th([], [html.text(header)])

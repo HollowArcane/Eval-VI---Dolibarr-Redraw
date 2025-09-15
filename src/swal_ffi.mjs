@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 export function success(title, message)
 {
     Swal.fire({
@@ -21,4 +23,14 @@ export function info(title, message)
         title: title,
         icon: 'info'
     });
+}
+export function confirm(title, message, then)
+{
+    Swal.fire({
+        title: title,
+        message: message,
+        showDenyButton: true,
+        confirmButtonText: "Confirmer",
+        denyButtonText: `Annuler`
+    }).then((result) => then(result.isConfirmed));
 }

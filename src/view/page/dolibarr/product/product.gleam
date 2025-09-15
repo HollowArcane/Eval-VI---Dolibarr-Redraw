@@ -1,53 +1,84 @@
-import gleam/list
-import util/html2pdf
-import web/hooks
+import gleam/javascript/promise
+import util/csv
+import util/errors
 import redraw/dom/attribute
 import view/components/bs5
-import view/components/stock_asap
-import view/components/common
-import model/dolibarr/product/product_model
+import model/dolibarr/product/product_filter
 import service/dolibarr/product/product_service
-import view/templates/template
-import redraw/dom/html
+import view/page/page
+import model/dolibarr/product/product_model.{type Product}
 import redraw
 
-pub fn create_page()
-{
+pub fn create_page() {
     use <- redraw.component__("ProductPage")
 
-    let #(page, set_page) = redraw.use_state(1)
-    let #(table, data, load_data) = common.table(
-        product_model.format_view,
-        product_service.list
+    page.create_crud_plus(
+        id: "product",
+        title: "Produit",
+        get_ref: fn(product: Product) {product.ref},
+        create_service: product_service.create,
+        read_service: product_service.fetch,
+        update_service: fn(_, _, _) { promise.resolve(Ok(Nil)) },
+        delete_service: product_service.delete,
+        import_service: product_service.import_,
+        default_filter: product_filter.new(),
+        form_decoder: product_model.form_decoder,
+        csv_handler: csv.decode_file(_, product_model.csv_decoder()),
+        filter_decoder: product_filter.decoder,
+        view_format: product_model.format_view,
+        pdf_list_format: product_model.format_view,
+        pdf_card_format: product_model.format_view,
+        csv_format: product_model.format_csv,
+        json_format: product_model.to_json,
+        render_create:,
+        render_search:,
     )
-    let data = list.map(data, product_model.format_view)
+}
 
-    let #(form, set_open) = {
-        use get_error <- common.modal_form(
-            title: "Insertion Produit",
-            decoder: product_model.form_decoder(),
-            service: product_service.create,
-            then: fn() {load_data(page) "Produit inséré avec succès"})
-        [
-            bs5.text_input("Réference", get_error("ref"), [attribute.name("ref")]),
-            bs5.text_input("Libellé", get_error("label"), [attribute.name("label")]),
-            bs5.textarea("Description", get_error("description"), [attribute.name("description")]),
-            bs5.number_input("Prix", get_error("price"), [attribute.name("price")]),
-        ]
-    }    
-
-    hooks.use_init_effect(fn() {load_data(page)}, #(page))
-
-    template.home("/product", html.div([], [
-        form,
-        common.title([
-            stock_asap.btn_add(fn() {set_open(True)}),
-            stock_asap.btn_export_pdf(fn() {
-                html2pdf.generate_table("Liste des Produits", data)
-            }),
-            html.text("Liste des Produits"),
-            common.pagination(page, set_page)
+pub fn render_create(errors)
+{
+    [
+        bs5.text_input("Réference", errors |> errors.get("ref"), [
+            attribute.name("ref"),
         ]),
-        table
-    ]))
+        bs5.text_input("Libellé", errors |> errors.get("label"), [
+            attribute.name("label"),
+        ]),
+        bs5.textarea("Description", errors |> errors.get("description"), [
+            attribute.name("description"),
+        ]),
+        bs5.number_input("Prix", errors |> errors.get("price"), [
+            attribute.name("price"),
+        ]),
+        bs5.checkbox("True", "Disponible à l'Achat", errors |> errors.get("status_buy"), [
+            attribute.name("status_buy")
+        ]),
+        bs5.checkbox("True", "Disponible en Vente", errors |> errors.get("status"), [
+            attribute.name("status")
+        ]),
+        bs5.checkbox("True", "Manufacturé", errors |> errors.get("finished"), [
+            attribute.name("finished")
+        ]),
+    ]
+}
+
+fn render_search(errors)
+{
+    [
+        bs5.text_input("Réference", errors |> errors.get("ref"), [
+            attribute.name("ref")
+        ]),
+        bs5.text_input("Libellé", errors |> errors.get("label"), [
+            attribute.name("label")
+        ]),
+        bs5.textarea("Description", errors |> errors.get("description"), [
+            attribute.name("description")
+        ]),
+        bs5.number_input("Prix Min", errors |> errors.get("price_min"), [
+            attribute.name("price_min")
+        ]),
+        bs5.number_input("Prix Max", errors |> errors.get("price_max"), [
+            attribute.name("price_max")
+        ]),
+    ]
 }

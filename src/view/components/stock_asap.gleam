@@ -8,10 +8,20 @@ import view/components/bs5
 import view/components/mui/dialog
 import redraw/dom/events
 
-pub type Data
+pub type Data(model)
 {
     HTML(content: String)
-    Select(value: String, options: List(#(String, String)))
+    BtnDelete(model)
+    BtnUpdate(title: String, icon: String, model: model, update: fn(model) -> model)
+    BtnExportPDF(model: model)
+    BtnGoto(path: String)
+	Badge(text: String, variant: bs5.Variant)
+}
+pub fn loader()
+{
+    html.span([attribute.class("d-inline-block px-5 pb-4")], [
+        html.span([attribute.class("loader")], [])
+    ])
 }
 
 pub fn brand()
@@ -31,6 +41,17 @@ pub fn brand_variation()
     ])
 }
 
+pub fn btn_update(title title, icon icon, on_click on_click)
+{
+    bs5.button(bs5.secondary_info, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip(title)
+    ]
+    , [
+        fa.icon(icon)
+    ])
+}
+
 pub fn btn_add(on_click on_click)
 {
     btn_primary([
@@ -39,6 +60,17 @@ pub fn btn_add(on_click on_click)
     ]
     , [
         fa.icon("fa fa-add")
+    ])
+}
+
+pub fn btn_search(on_click on_click)
+{
+    bs5.button(bs5.secondary_info, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip("Chercher")
+    ]
+    , [
+        fa.icon("fa fa-search")
     ])
 }
 
@@ -53,6 +85,66 @@ pub fn btn_export_pdf(on_click on_click)
     ])
 }
 
+pub fn btn_reset(on_click action: fn() -> Nil)
+{
+    bs5.button(bs5.secondary_danger, [
+        events.on_click(fn(_) {action()}),
+        ..bs5_attributes.tooltip("Réinitialiser")
+    ]
+    , [
+	html.div([
+		attribute.class_name("d-flex gap-3 align-items-center"),
+	], [
+        	fa.icon("fa fa-trash"),
+		html.text("Réinitialiser")
+	])
+    ])
+}
+
+pub fn btn_delete(on_click action: fn() -> Nil)
+{
+    bs5.button(bs5.secondary_danger, [
+        events.on_click(fn(_) {action()}),
+        ..bs5_attributes.tooltip("Supprimer")
+    ]
+    , [
+        fa.icon("fa fa-trash")
+    ])
+}
+
+pub fn btn_import_csv(on_click on_click)
+{
+    bs5.button(bs5.secondary_success, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip("Exporter CSV")
+    ]
+    , [
+        fa.icon("fa fa-upload")
+    ])
+}
+
+pub fn btn_export_csv(on_click on_click)
+{
+    bs5.button(bs5.secondary_success, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip("Exporter CSV")
+    ]
+    , [
+        fa.icon("fa fa-file-csv")
+    ])
+}
+
+pub fn btn_export_json(on_click on_click)
+{
+    bs5.button(bs5.secondary, [
+        events.on_click(fn(_) {on_click()}),
+        ..bs5_attributes.tooltip("Exporter JSON")
+    ]
+    , [
+        fa.icon("fa fa-file")
+    ])
+}
+
 pub fn btn_primary(attributes, content)
 {
     bs5.button(bs5.primary, [
@@ -64,6 +156,21 @@ pub fn btn_primary(attributes, content)
     ], content)
 }
 
+pub fn btn_primary_cta(text: String, loading: Bool, on_click on_click)
+{
+    bs5.button(bs5.primary, [
+	attribute.type_("button"),
+        attribute.class_name("d-flex align-items-center justify-content-center gap-3 btn btn-primary " <> bools.check(loading, "disabled", "")),
+        attribute.style([
+            #("background-image", "linear-gradient(-45deg, #ffc700 15%, #2e3062 15%, #2e3062 85%, #ffc700 85%)")
+        ]),
+	events.on_click(fn(_) {on_click()}),
+    ], [
+        html.text(text),
+        bools.check(loading, loader(), redraw.fragment([]))
+    ])
+}
+
 pub fn btn_submit(text: String, loading: Bool)
 {
     bs5.button(bs5.primary, [
@@ -73,7 +180,7 @@ pub fn btn_submit(text: String, loading: Bool)
         ])
     ], [
         html.text(text),
-        bools.check(loading, bs5.spinner(), redraw.fragment([]))
+        bools.check(loading, loader(), redraw.fragment([]))
     ])
 }
 

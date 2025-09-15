@@ -1,9 +1,10 @@
 import gleam/javascript/promise.{type Promise}
 
-pub fn async(body: fn() -> a, then: fn(a) -> Promise(b))
+pub fn promise(body: fn() -> a)
 {
-    promise.await({
-        use trigger <- promise.new
-        trigger(body())
-    }, then)
+    use trigger <- promise.new
+    trigger(body())
 }
+
+pub fn async(body: fn() -> a, then: fn(a) -> Promise(b))
+{ promise.await(promise(body), then) }
